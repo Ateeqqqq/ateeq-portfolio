@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Story | Ateeq Uddin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #242424;
+            --gold-primary: #B88A44;
+            --gold-light: #F0C875;
+            --white: #FFFFFF;
+            --text-primary: #FFFFFF;
+            --text-secondary: #b3b3b3;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(18, 18, 18, 0.8) 0%, rgba(18, 18, 18, 0) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 16px 32px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        nav:hover {
+            border-color: rgba(184, 138, 68, 0.2);
+            background: rgba(15, 15, 15, 0.8);
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold-primary);
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--gold-light);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 0;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 120px 40px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        section:nth-child(odd) {
+            background: linear-gradient(135deg, rgba(184, 138, 68, 0.02) 0%, rgba(240, 200, 117, 0.01) 100%);
+        }
+
+        section > div {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Article Content */
+        article {
+            flex: 1;
+            max-width: 650px;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        article h1 {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        article h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--gold-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 16px;
+        }
+
+        article h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
+            border-radius: 2px;
+        }
+
+        article p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            word-spacing: 0.5px;
+        }
+
+        article b {
+            color: var(--gold-light);
+            font-weight: 700;
+        }
+
+        article p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Image Collage */
+        aside {
+            flex: 1;
+            position: relative;
+            height: 700px;
+            min-width: 600px;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        aside img {
+            position: absolute;
+            border: 3px solid var(--gold-primary);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            transition: var(--transition);
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        aside img:hover {
+            transform: scale(1.08) !important;
+            z-index: 10;
+            box-shadow: 0 30px 80px rgba(184, 138, 68, 0.3);
+            border-color: var(--gold-light);
+        }
+
+        /* ORIGINS COLLAGE */
+        #hero aside img:nth-child(1) {
+            width: 360px;
+            left: 120px;
+            top: 170px;
+            z-index: 3;
+            transform: rotate(-8deg);
+        }
+
+        #hero aside img:nth-child(2) {
+            width: 220px;
+            left: 340px;
+            top: 60px;
+            z-index: 4;
+            transform: rotate(10deg);
+        }
+
+        #hero aside img:nth-child(3) {
+            width: 210px;
+            left: 320px;
+            top: 360px;
+            z-index: 2;
+            transform: rotate(-12deg);
+        }
+
+        /* SCHOOL COLLAGE */
+        #school-days aside img:nth-child(1) {
+            width: 360px;
+            left: 120px;
+            top: 170px;
+            z-index: 3;
+            transform: rotate(-8deg);
+        }
+
+        #school-days aside img:nth-child(2) {
+            width: 230px;
+            left: 340px;
+            top: 60px;
+            z-index: 4;
+            transform: rotate(12deg);
+        }
+
+        #school-days aside img:nth-child(3) {
+            width: 210px;
+            left: 310px;
+            top: 370px;
+            z-index: 2;
+            transform: rotate(-15deg);
+        }
+
+        /* TURNING POINT COLLAGE */
+        #coding aside img:nth-child(1) {
+            width: 370px;
+            left: 120px;
+            top: 170px;
+            z-index: 3;
+            transform: rotate(-8deg);
+        }
+
+        #coding aside img:nth-child(2) {
+            width: 240px;
+            left: 350px;
+            top: 60px;
+            z-index: 4;
+            transform: rotate(10deg);
+        }
+
+        #coding aside img:nth-child(3) {
+            width: 180px;
+            left: 340px;
+            top: 400px;
+            z-index: 2;
+            transform: rotate(-15deg);
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            section {
+                padding: 100px 30px;
+            }
+
+            section > div {
+                gap: 60px;
+            }
+
+            article h1 {
+                font-size: 48px;
+            }
+
+            article h2 {
+                font-size: 36px;
+            }
+
+            article p {
+                font-size: 15px;
+            }
+
+            aside {
+                min-width: 500px;
+                height: 600px;
+            }
+
+            #hero aside img:nth-child(1),
+            #school-days aside img:nth-child(1),
+            #coding aside img:nth-child(1) {
+                width: 300px;
+                left: 80px;
+            }
+
+            #hero aside img:nth-child(2),
+            #school-days aside img:nth-child(2),
+            #coding aside img:nth-child(2) {
+                width: 180px;
+                left: 280px;
+            }
+
+            #hero aside img:nth-child(3),
+            #school-days aside img:nth-child(3),
+            #coding aside img:nth-child(3) {
+                width: 160px;
+                left: 260px;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            section {
+                padding: 80px 20px;
+            }
+
+            section > div {
+                flex-direction: column;
+                gap: 60px;
+            }
+
+            aside {
+                width: 100%;
+                min-width: auto;
+                height: 500px;
+            }
+
+            article h1 {
+                font-size: 40px;
+            }
+
+            article h2 {
+                font-size: 32px;
+            }
+
+            article p {
+                font-size: 16px;
+            }
+
+            #hero aside img:nth-child(1),
+            #school-days aside img:nth-child(1),
+            #coding aside img:nth-child(1) {
+                width: 280px;
+                left: 80px;
+                top: 100px;
+            }
+
+            #hero aside img:nth-child(2),
+            #school-days aside img:nth-child(2),
+            #coding aside img:nth-child(2) {
+                width: 160px;
+                left: 250px;
+                top: 20px;
+            }
+
+            #hero aside img:nth-child(3),
+            #school-days aside img:nth-child(3),
+            #coding aside img:nth-child(3) {
+                width: 140px;
+                left: 230px;
+                top: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 16px;
+                min-height: auto;
+            }
+
+            article h1 {
+                font-size: 32px;
+                margin-bottom: 24px;
+            }
+
+            article h2 {
+                font-size: 26px;
+                margin-bottom: 20px;
+            }
+
+            article p {
+                font-size: 15px;
+                margin-bottom: 16px;
+            }
+
+            aside {
+                height: 400px;
+            }
+
+            #hero aside img:nth-child(1),
+            #school-days aside img:nth-child(1),
+            #coding aside img:nth-child(1) {
+                width: 220px;
+                left: 60px;
+            }
+
+            #hero aside img:nth-child(2),
+            #school-days aside img:nth-child(2),
+            #coding aside img:nth-child(2) {
+                width: 130px;
+                left: 200px;
+            }
+
+            #hero aside img:nth-child(3),
+            #school-days aside img:nth-child(3),
+            #coding aside img:nth-child(3) {
+                width: 110px;
+                left: 180px;
+                top: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            section {
+                padding: 40px 12px;
+            }
+
+            article h1 {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+
+            article h2 {
+                font-size: 22px;
+                margin-bottom: 16px;
+            }
+
+            article p {
+                font-size: 14px;
+                margin-bottom: 12px;
+                line-height: 1.6;
+            }
+
+            aside {
+                height: 350px;
+                min-width: 100%;
+            }
+
+            #hero aside img:nth-child(1),
+            #school-days aside img:nth-child(1),
+            #coding aside img:nth-child(1) {
+                width: 180px;
+                left: 40px;
+                top: 80px;
+            }
+
+            #hero aside img:nth-child(2),
+            #school-days aside img:nth-child(2),
+            #coding aside img:nth-child(2) {
+                width: 110px;
+                left: 160px;
+                top: 10px;
+            }
+
+            #hero aside img:nth-child(3),
+            #school-days aside img:nth-child(3),
+            #coding aside img:nth-child(3) {
+                width: 90px;
+                left: 150px;
+                top: 220px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header>
+        <nav>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="story.html">Story</a>
+            <a href="skills.html">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="clientform.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- Hero Section: Origins -->
+        <section id="hero">
+            <div>
+                <article>
+                    <h1>How I Found My Way In</h1>
+                    <h2>Origins</h2>
+                    <p>Hyderabad, India. Early 2000s. Born into a city where biryani is a religion, traffic is a boss fight, and every family gathering eventually turns into a discussion about your future.</p>
+                    <p>A computer showed up in my life before I understood what it could do. Games got my attention. The internet kept it.</p>
+                    <p>Years later, curiosity turned into tabs. Tabs turned into tutorials. Tutorials turned into unfinished projects, finished projects, and the occasional bug that somehow fixed itself after a restart.</p>
+                    <p>Somewhere along the way, I stopped asking:</p>
+                    <p><b>"How does this website work?"</b></p>
+                    <p>and started asking:</p>
+                    <p><b>"Can I build one better?"</b></p>
+                </article>
+                <aside>
+                    <img src="https://i.ibb.co/8DdBTB8k/me.jpg" alt="Me">
+                    <img src="https://i.ibb.co/B2DwXH0j/pc.png" alt="Computer">
+                    <img src="https://i.ibb.co/5xKGSLyz/xp.png" alt="Windows XP">
+                </aside>
+            </div>
+        </section>
+
+        <!-- Section: School, Sports & Competition -->
+        <section id="school-days">
+            <div>
+                <article>
+                    <h2>School, Sports & Competition</h2>
+                    <p>School was only part of the story. Outside the classroom, I spent years training, competing, and testing my limits.</p>
+                    <p>MMA and boxing became a huge part of my life. Long hours in the gym taught me discipline, consistency, and how to keep moving forward even when things weren't going my way.</p>
+                    <p>Those lessons would later become just as useful in technology as they were in sports.</p>
+                </article>
+                <aside>
+                    <img src="https://i.ibb.co/v6nkcX9f/vc.webp" alt="Training">
+                    <img src="https://i.ibb.co/5XqhvxcM/asha.png" alt="Sports">
+                    <img src="https://i.ibb.co/Q30R7SD1/box.png" alt="Boxing">
+                </aside>
+            </div>
+        </section>
+
+        <!-- Section: The Turning Point -->
+        <section id="coding">
+            <div>
+                <article>
+                    <h2>The Turning Point</h2>
+                    <p>COVID changed the plan.</p>
+                    <p>What felt like setbacks became the push I needed to rethink my direction and start building something new.</p>
+                    <p>I traded routine for curiosity, diving into code, cybersecurity, web development, digital marketing, and business.</p>
+                    <p>Every skill opened the door to the next.</p>
+                    <p>Today, I'm building websites, studying full stack development, exploring AI and cybersecurity, growing Code XMoRE, and working toward projects like BrickBuddy.</p>
+                    <p>Still the same Hyderabad kid. Just chasing bigger challenges now. 🚀</p>
+                </article>
+                <aside>
+                    <img src="https://i.ibb.co/C5mBw7Qy/mma.jpg" alt="MMA Training">
+                    <img src="https://i.ibb.co/NnbPSDCT/desk.jpg" alt="Workspace">
+                    <img src="https://i.ibb.co/pjLw1J72/book.jpg" alt="Learning">
+                </aside>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
