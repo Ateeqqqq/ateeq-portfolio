@@ -1,12 +1,17 @@
-
-
-Skills · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Skills | Ateeq Uddin</title>
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('site-theme');
+    if(t){ document.documentElement.setAttribute('data-theme', t); }
+  }catch(e){}
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -37,6 +42,17 @@ Skills · HTML
     transition:color .25s ease, background-color .25s ease;
   }
   .navlinks a:hover, .navlinks a.current{ color:var(--nav-accent); background:rgba(47,111,78,0.09); }
+  .navlinks a.resume-btn{ border:1px solid var(--nav-accent); color:var(--nav-accent) !important; }
+  .navlinks a.resume-btn:hover{ background:var(--nav-accent); color:var(--nav-paper) !important; }
+  .theme-toggle{
+    font-family:'Sora', sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.06em;
+    background:none; border:1px solid var(--nav-line); color:var(--nav-ink); border-radius:20px;
+    padding:7px 12px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:border-color .2s, color .2s;
+  }
+  .theme-toggle:hover{ border-color:var(--nav-accent); color:var(--nav-accent); }
+  .theme-toggle .icon-dark{ display:none; }
+  :root[data-theme="light"] .theme-toggle .icon-dark{ display:inline; }
+  :root[data-theme="light"] .theme-toggle .icon-light{ display:none; }
 
   .hamburger{
     display:none; flex-direction:column; justify-content:center; gap:5px;
@@ -60,6 +76,7 @@ Skills · HTML
     }
     .navlinks.open{ transform:translateX(0); }
     .navlinks a{ padding:14px 12px; font-size:13px; }
+    .navlinks .theme-toggle{ margin:10px 12px 4px; align-self:flex-start; }
   }
  
   /* ===== body: skill-tree / tech-tree system, deliberately different ===== */
@@ -72,6 +89,16 @@ Skills · HTML
     --teal:#4FA8A0;
     --muted:#5B6472;
     --line:#2A3348;
+  }
+  :root[data-theme="light"]{
+    --paper:#F3F5FA;
+    --card:#FFFFFF;
+    --ink:#141A26;
+    --ink-soft:#5B6472;
+    --gold:#B8791C;
+    --teal:#2E7A72;
+    --muted:#8A93A6;
+    --line:#DCE1EA;
   }
   main{ background:var(--paper); color:var(--ink); padding:80px 6vw 100px; }
  
@@ -94,6 +121,7 @@ Skills · HTML
   /* ---- radial orbit diagram ---- */
   .orbit-wrap{ position:relative; width:100%; max-width:620px; aspect-ratio:1/1; margin:50px auto 60px; }
   .orbit-wrap svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .orbit-line{ stroke:var(--line); }
   .hub{
     position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
     width:110px; height:110px; border-radius:50%; background:var(--card); border:2px solid var(--gold);
@@ -147,6 +175,21 @@ Skills · HTML
   @media (max-width:760px){
     .orbit-wrap{ display:none; }
   }
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+  .reveal-stagger > *{ opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal-stagger.is-visible > *{ opacity:1; transform:translateY(0); }
+  .reveal-stagger.is-visible > *:nth-child(1){ transition-delay:.05s; }
+  .reveal-stagger.is-visible > *:nth-child(2){ transition-delay:.12s; }
+  .reveal-stagger.is-visible > *:nth-child(3){ transition-delay:.19s; }
+  .reveal-stagger.is-visible > *:nth-child(4){ transition-delay:.26s; }
+  .reveal-stagger.is-visible > *:nth-child(5){ transition-delay:.33s; }
+  .reveal-stagger.is-visible > *:nth-child(6){ transition-delay:.4s; }
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .reveal-stagger > *{ transition:none !important; opacity:1 !important; transform:none !important; }
+  }
 </style>
 </head>
 <body>
@@ -165,6 +208,10 @@ Skills · HTML
     <a href="skills.html" class="current">Skills</a>
     <a href="sttory.html">My Story</a>
     <a href="clientform.html">Contact</a>
+    <a href="resume.pdf" download class="resume-btn">Resume ↓</a>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+      <span class="icon-dark">🌙 Dark</span><span class="icon-light">☀️ Light</span>
+    </button>
   </div>
   <div class="nav-overlay" id="navOverlay"></div>
 </nav>
@@ -196,34 +243,49 @@ Skills · HTML
   overlay.addEventListener('click', closeMenu);
   links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
   window.addEventListener('resize', function(){ if (window.innerWidth > 760) closeMenu(); });
+
+  var themeToggle = document.getElementById('themeToggle');
+  var PAGE_DEFAULT = 'dark';
+  function currentTheme(){
+    return document.documentElement.getAttribute('data-theme') || PAGE_DEFAULT;
+  }
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    try{ localStorage.setItem('site-theme', t); }catch(e){}
+  }
+  if(themeToggle){
+    themeToggle.addEventListener('click', function(){
+      applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+    });
+  }
 })();
 </script>
  
 <main>
  
-  <div class="intro">
+  <div class="intro reveal">
     <span class="eyebrow">Tech Tree</span>
     <h1>Skills &amp; Stack</h1>
     <p>What used to be a beginner's learning roadmap is now a working stack — built and shipped on real
     client projects, with one branch still actively unlocking.</p>
   </div>
  
-  <div class="legend">
+  <div class="legend reveal">
     <span><span class="dot core"></span> Core stack — production experience</span>
     <span><span class="dot growing"></span> Growing — used, not primary</span>
     <span><span class="dot exploring"></span> Exploring — in progress (MCA)</span>
   </div>
  
-  <div class="orbit-wrap">
+  <div class="orbit-wrap reveal">
     <svg viewBox="0 0 600 600">
-      <circle cx="300" cy="300" r="250" fill="none" stroke="#2A3348" stroke-width="1"/>
-      <circle cx="300" cy="300" r="150" fill="none" stroke="#2A3348" stroke-width="1"/>
-      <line x1="300" y1="300" x2="300" y2="50" stroke="#2A3348" stroke-width="1.5"/>
-      <line x1="300" y1="300" x2="516.5" y2="175" stroke="#2A3348" stroke-width="1.5"/>
-      <line x1="300" y1="300" x2="516.5" y2="425" stroke="#2A3348" stroke-width="1.5"/>
-      <line x1="300" y1="300" x2="300" y2="550" stroke="#2A3348" stroke-width="1.5"/>
-      <line x1="300" y1="300" x2="83.5" y2="425" stroke="#2A3348" stroke-width="1.5"/>
-      <line x1="300" y1="300" x2="83.5" y2="175" stroke="#2A3348" stroke-width="1.5"/>
+      <circle cx="300" cy="300" r="250" fill="none" class="orbit-line" stroke-width="1"/>
+      <circle cx="300" cy="300" r="150" fill="none" class="orbit-line" stroke-width="1"/>
+      <line x1="300" y1="300" x2="300" y2="50" class="orbit-line" stroke-width="1.5"/>
+      <line x1="300" y1="300" x2="516.5" y2="175" class="orbit-line" stroke-width="1.5"/>
+      <line x1="300" y1="300" x2="516.5" y2="425" class="orbit-line" stroke-width="1.5"/>
+      <line x1="300" y1="300" x2="300" y2="550" class="orbit-line" stroke-width="1.5"/>
+      <line x1="300" y1="300" x2="83.5" y2="425" class="orbit-line" stroke-width="1.5"/>
+      <line x1="300" y1="300" x2="83.5" y2="175" class="orbit-line" stroke-width="1.5"/>
     </svg>
  
     <div class="hub"><span class="mono">AU</span><small>Full-Stack</small></div>
@@ -260,7 +322,7 @@ Skills · HTML
     </div>
   </div>
  
-  <div class="detail-grid">
+  <div class="detail-grid reveal-stagger">
     <div class="detail-card">
       <div class="detail-top"><span class="dot core"></span><h3>Frontend</h3></div>
       <div class="tags">
@@ -308,19 +370,23 @@ Skills · HTML
   <div>Hyderabad, Telangana, IN</div>
 </footer>
  
+<script>
+(function(){
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  if(!('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      io.unobserve(entry.target);
+    });
+  }, { threshold:0.15, rootMargin:'0px 0px -60px 0px' });
+  revealEls.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
 </body>
 </html>
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
