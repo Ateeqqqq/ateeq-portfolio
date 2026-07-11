@@ -159,14 +159,24 @@
 
   @media (max-width:1000px){
     .chapter-inner, .chapter:nth-child(even) .chapter-inner{ flex-direction:column; gap:50px; }
-    .polaroids{ width:100%; min-width:auto; height:420px; margin:0 auto; }
+    .polaroids{
+      width:100%; min-width:auto; height:auto; position:static;
+      display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start;
+      gap:26px 18px; padding:6px 0 24px;
+    }
+    .polaroid{
+      position:relative !important; left:auto !important; top:auto !important; right:auto !important; bottom:auto !important;
+    }
+    .polaroid.p1, .polaroid.p2, .polaroid.p3{ width:170px !important; height:195px !important; }
+    .polaroid.p1{ transform:rotate(-4deg) !important; }
+    .polaroid.p2{ transform:rotate(5deg) !important; }
+    .polaroid.p3{ transform:rotate(-6deg) !important; }
+    .polaroid:hover{ transform:scale(1.06) rotate(0deg) !important; }
   }
   @media (max-width:600px){
     .chapter{ padding:70px 5vw; }
-    .polaroids{ height:340px; }
-    .polaroid.p1{ width:220px !important; height:250px !important; }
-    .polaroid.p2{ width:140px !important; height:160px !important; }
-    .polaroid.p3{ width:140px !important; height:160px !important; }
+    .polaroids{ gap:20px 14px; }
+    .polaroid.p1, .polaroid.p2, .polaroid.p3{ width:130px !important; height:150px !important; }
   }
   @media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; } }
 </style>
