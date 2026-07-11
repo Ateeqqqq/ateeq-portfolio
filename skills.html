@@ -31,9 +31,36 @@ Skills · HTML
   }
   .brandname{ font-family:'Fraunces', serif; font-weight:600; font-size:18px; }
   .brandname span{ color:#BF4E22; }
-  .navlinks{ display:flex; gap:30px; font-family:'Sora', sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.08em; }
-  .navlinks a{ text-decoration:none; color:#4C5850; transition:color .2s; }
-  .navlinks a:hover, .navlinks a.current{ color:var(--nav-accent); }
+  .navlinks{ display:flex; align-items:center; gap:10px; font-family:'Sora', sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.08em; }
+  .navlinks a{
+    text-decoration:none; color:#4C5850; padding:8px 12px; border-radius:5px;
+    transition:color .25s ease, background-color .25s ease;
+  }
+  .navlinks a:hover, .navlinks a.current{ color:var(--nav-accent); background:rgba(47,111,78,0.09); }
+
+  .hamburger{
+    display:none; flex-direction:column; justify-content:center; gap:5px;
+    width:36px; height:36px; background:none; border:none; cursor:pointer; padding:0; z-index:40; flex-shrink:0;
+  }
+  .hamburger span{ display:block; width:100%; height:2px; background:var(--nav-ink); transition:transform .3s ease, opacity .3s ease; }
+  .hamburger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2){ opacity:0; }
+  .hamburger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  .nav-overlay{ display:none; position:fixed; inset:0; background:rgba(21,32,25,0.4); z-index:29; }
+  .nav-overlay.open{ display:block; }
+
+  @media (max-width:760px){
+    .hamburger{ display:flex; }
+    .navlinks{
+      position:fixed; top:0; right:0; height:100vh; width:min(78vw,300px);
+      background:var(--nav-paper); flex-direction:column; align-items:stretch; gap:4px;
+      padding:96px 28px 40px; transform:translateX(100%); transition:transform .35s ease;
+      border-left:1px solid var(--nav-line); box-shadow:-10px 0 30px rgba(0,0,0,0.12); z-index:35;
+    }
+    .navlinks.open{ transform:translateX(0); }
+    .navlinks a{ padding:14px 12px; font-size:13px; }
+  }
  
   /* ===== body: skill-tree / tech-tree system, deliberately different ===== */
   :root{
@@ -119,7 +146,6 @@ Skills · HTML
  
   @media (max-width:760px){
     .orbit-wrap{ display:none; }
-    .navlinks{ gap:14px; font-size:11px; }
   }
 </style>
 </head>
@@ -127,19 +153,51 @@ Skills · HTML
  
 <header>
 <nav>
-  <a class="brandmark" href="portfolio.html">
+  <a class="brandmark" href="index.html">
     <div class="monogram">AU</div>
     <div class="brandname">Ateeq<span>.</span>dev</div>
   </a>
-  <div class="navlinks">
-    <a href="portfolio.html">Portfolio</a>
-    <a href="story.html">Story</a>
+  <button class="hamburger" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNavLinks">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="navlinks" id="siteNavLinks">
+    <a href="index.html">Home</a>
     <a href="skills.html" class="current">Skills</a>
-    <a href="portfolio.html#projects">Projects</a>
+    <a href="sttory.html">My Story</a>
     <a href="clientform.html">Contact</a>
   </div>
+  <div class="nav-overlay" id="navOverlay"></div>
 </nav>
 </header>
+
+<script>
+(function(){
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('siteNavLinks');
+  var overlay = document.getElementById('navOverlay');
+  if(!toggle || !links || !overlay) return;
+  function closeMenu(){
+    toggle.classList.remove('open');
+    links.classList.remove('open');
+    overlay.classList.remove('open');
+    toggle.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  function openMenu(){
+    toggle.classList.add('open');
+    links.classList.add('open');
+    overlay.classList.add('open');
+    toggle.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  }
+  toggle.addEventListener('click', function(){
+    links.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  overlay.addEventListener('click', closeMenu);
+  links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
+  window.addEventListener('resize', function(){ if (window.innerWidth > 760) closeMenu(); });
+})();
+</script>
  
 <main>
  
